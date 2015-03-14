@@ -34,7 +34,7 @@
 #define RC_CMD_PIN       13 // Output: changes state when valid command is received.
 
 // Inputs
-#define IR_PIN 2            // Pin to which the IR decoder chip connects.
+#define IR_PIN 2            // Pin to which the IR decoder module connects.
 
 // Outputs
 #define VOL_UP_PIN    12    // Pulses high when volume should increase.

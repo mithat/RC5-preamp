@@ -1,5 +1,4 @@
-/** @file utils.cpp
- * Miscellaneous utilities for RC-preamp. */
+/** @file */
 
 /*
  * Copyright (C) 2015 Mithat Konar (mithat ~at~ mithatkonar.com).
@@ -143,4 +142,46 @@ void pwrCmd()
     {
         setPower(!isPower);
     }
+}
+
+/**
+ * Handle remote control commands.
+ * @pre  ::rcAddress is DEVICE_PREAMP
+ * @pre  ::rcCommand is valid.
+ * @pre  ::rcToggle is valid.
+ * @post ::rcTogglePrevious set to ::rcToggle
+ * @return void
+ */
+void rcProcessCommand()
+{
+    if (isPower)
+    {
+        rcCommandAck();
+        switch (rcCommand)
+        {
+        case CMD_VOLUP:
+            volCmd(UP);
+            break;
+        case CMD_VOLDN:
+            volCmd(DN);
+            break;
+        case CMD_MUTE:
+            muteCmd();
+            break;
+        case CMD_INPUT:
+            sourceCmd(UP);
+            break;
+        case CMD_PWR:
+            pwrCmd();
+            break;
+        default:
+            ;
+        }
+    }
+    else if (rcCommand == CMD_PWR)
+    {
+        rcCommandAck();
+        pwrCmd();
+    }
+    rcTogglePrevious = rcToggle;
 }

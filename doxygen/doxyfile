@@ -44,7 +44,7 @@ PROJECT_NUMBER         =
 # for a project that appears at the top of each page and should give viewer a
 # quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF          = "Because remote controlled audio is free and for the people."
+PROJECT_BRIEF          = "Because remote controlled audio is free and for the people.™"
 
 # With the PROJECT_LOGO tag one can specify an logo or icon that is included in
 # the documentation. The maximum height of the logo should not exceed 55 pixels
@@ -1131,7 +1131,6 @@ HTML_COLORSTYLE_HUE    = 220
 # Minimum value: 0, maximum value: 255, default value: 100.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-###HTML_COLORSTYLE_SAT    = 100
 HTML_COLORSTYLE_SAT    = 20
 
 # The HTML_COLORSTYLE_GAMMA tag controls the gamma correction applied to the

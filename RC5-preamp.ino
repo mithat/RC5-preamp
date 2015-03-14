@@ -1,3 +1,5 @@
+/** @file */
+
 /*
  * Copyright (C) 2015 Mithat Konar (mithat ~at~ mithatkonar.com).
  *
@@ -98,36 +100,6 @@ void loop()
         Serial.print("]");
         Serial.println();
 #endif // PDEBUG
-
-        if (isPower)
-        {
-            rcCommandAck();
-            switch (rcCommand)
-            {
-            case CMD_VOLUP:
-                volCmd(UP);
-                break;
-            case CMD_VOLDN:
-                volCmd(DN);
-                break;
-            case CMD_MUTE:
-                muteCmd();
-                break;
-            case CMD_INPUT:
-                sourceCmd(UP);
-                break;
-            case CMD_PWR:
-                pwrCmd();
-                break;
-            default:
-                ;
-            }
-        }
-        else if (rcCommand == CMD_PWR)
-        {
-            rcCommandAck();
-            pwrCmd();
-        }
-        rcTogglePrevious = rcToggle;
+        rcProcessCommand();
     }
 }

@@ -1,3 +1,5 @@
+/** @file */
+
 #ifndef UTILS_H
 #define UTILS_H
 
@@ -34,5 +36,6 @@ void volCmd(bool direction);
 void muteCmd();
 void sourceCmd(bool direction);
 void pwrCmd();
+void rcProcessCommand();
 
 #endif // UTILS_H

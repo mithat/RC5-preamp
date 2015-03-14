@@ -59,8 +59,9 @@ Pin name           | Type   | Function
 `MUTE_PIN`         | output | High when system should mute, low otherwise
 `PWR_PIN`          | output | High when system is in powered-up state, low otherwise
 
-The IR decoder chip should be a 36 kHz
-device. The [Vishay TSOP34136](http://www.vishay.com/docs/82490/tsop321.pdf)
+The IR decoder module should use a
+[36 kHz carrier](http://en.wikipedia.org/wiki/RC-5#Protocol_Details). The 
+[Vishay TSOP34136](http://www.vishay.com/docs/82490/tsop321.pdf)
 seems to work well.
 
 `VOL_UP_PIN` and `VOL_DN_PIN` will each pulse for about 150 msec on a 

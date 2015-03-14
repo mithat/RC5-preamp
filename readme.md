@@ -128,7 +128,7 @@ so it's not implemented.
 
 ### Software 
 Making sure the [RC5 library](https://github.com/guyc/RC5) is in
-`../libraries`., compile and upload this project onto your Arduino Uno using 
+`../libraries`, compile and upload this project onto your Arduino Uno using 
 your favorite method.
 
 For development, I used Sudar's 

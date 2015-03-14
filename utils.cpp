@@ -23,11 +23,11 @@
 #include "utils.h"
 #include "config.h"
 
-extern unsigned char togglePrevious;
-extern unsigned char toggle;
-extern unsigned long consecutivePressed;
-extern unsigned char address;
-extern unsigned char command;
+extern unsigned char rcAddress;
+extern unsigned char rcCommand;
+extern unsigned char rcToggle;
+extern unsigned char rcTogglePrevious;
+extern unsigned long rcConsecutivePressed;
 extern bool isMute;
 extern bool isPower;
 
@@ -49,7 +49,7 @@ void pulsePin(uint8_t pin, unsigned long len)
  * Toggle the state of the RC_CMD_PIN.
  * @return void
  */
-void commandAck()
+void rcCommandAck()
 {
     digitalWrite(RC_CMD_PIN, !digitalRead(RC_CMD_PIN));
 }
@@ -102,7 +102,7 @@ void volCmd(bool direction)
  */
 void muteCmd()
 {
-    if (toggle != togglePrevious)
+    if (rcToggle != rcTogglePrevious)
     {
         setMute(!isMute);
     }
@@ -116,18 +116,18 @@ void muteCmd()
  */
 void sourceCmd(bool direction)
 {
-    if (toggle != togglePrevious)   // if new press
+    if (rcToggle != rcTogglePrevious)   // if new press
     {
-        consecutivePressed = 0;
+        rcConsecutivePressed = 0;
         pulsePin(direction == UP ? SOURCE_UP_PIN : SOURCE_DN_PIN, PULSE_LEN);
     }
     else                            // if key held down,
     {
-        consecutivePressed++;
-        if (consecutivePressed % PULSE_SKIP == 0)    // execute only every PULSE_SKIP pulses
+        rcConsecutivePressed++;
+        if (rcConsecutivePressed % PULSE_SKIP == 0)    // execute only every PULSE_SKIP pulses
         {
             pulsePin(direction == UP ? SOURCE_UP_PIN : SOURCE_DN_PIN, PULSE_LEN);
-            Serial.println(consecutivePressed);
+            Serial.println(rcConsecutivePressed);
         }
     }
 }
@@ -139,7 +139,7 @@ void sourceCmd(bool direction)
  */
 void pwrCmd()
 {
-    if (toggle != togglePrevious)
+    if (rcToggle != rcTogglePrevious)
     {
         setPower(!isPower);
     }

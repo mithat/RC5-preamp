@@ -21,16 +21,27 @@
  */
 
 // ====================
-// Config constants
+// Options
 // ====================
 
+#define PDEBUG          // Print DEBUG stuff to Serial. Comment out or #undef for production.
+
+#define ACTIVE_LOW      // Uncomment to make switch inputs active low and enable pullups;
+                        // comment out to make switch inputs active high with no pullups.
+
+#define PULSE_LEN  150  // Number of milliseconds output pulses should last.
+#define PULSE_SKIP 5    // Number of pulses to skip in "long-gap" repetitions.
+
+// ====================
+// Constants
+// ====================
 // UI
-#define VOL_UP_SWITCH    A0 // Input: debounced N.O. volume up switch.
-#define VOL_DN_SWITCH    A1 // Input: debounced N.O. volume down switch.
-#define SOURCE_UP_SWITCH A2 // Input: debounced N.O. input source up switch.
-#define SOURCE_DN_SWITCH A3 // Input: debounced N.O. input source down switch.
-#define MUTE_SWITCH      A4 // Input: debounced N.O. mute switch.
-#define PWR_SWITCH       A5 // Input: debounced N.O. power switch.
+#define VOL_UP_SWITCH    A0 // Input: volume up switch.
+#define VOL_DN_SWITCH    A1 // Input: volume down switch.
+#define SOURCE_UP_SWITCH A2 // Input: input source up switch.
+#define SOURCE_DN_SWITCH A3 // Input: input source down switch.
+#define MUTE_SWITCH      A4 // Input: mute switch.
+#define PWR_SWITCH       A5 // Input: power switch.
 #define RC_CMD_PIN       13 // Output: changes state when valid command is received.
 
 // Inputs
@@ -51,13 +62,11 @@
 #define CMD_VOLUP     16
 #define CMD_VOLDN     17
 #define CMD_MUTE      13
-#define CMD_INPUT     59
-#define CMD_PWR       12    // This might be contentious. TODO: additional testing.
+#define CMD_INPUT     59    // This might be contentious. TODO: Additional testing of CMD_INPUT.
+#define CMD_PWR       12
 
+// Misc.
 #define DN false    // Indicates downward travel for volume and input select.
 #define UP true     // Indicates upward travel for volume and input select.
-
-#define PULSE_LEN   150     // number of milliseconds pulses should last.
-#define PULSE_SKIP  5       // number of pulses to skip in "long-gap" repetitions.
 
 #endif

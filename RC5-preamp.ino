@@ -17,22 +17,30 @@
  * along with RC-preamp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define PDEBUG  // Print DEBUG stuff to Serial. Comment out or #undef for production.
-
 #include "config.h"
 #include "utils.h"
 #include <RC5.h>
+
+#ifdef ACTIVE_LOW
+#define ACTIVE LOW
+#define INACTIVE HIGH
+#define INPUT_SWITCH INPUT_PULLUP
+#else
+#define ACTIVE HIGH
+#define INACTIVE LOW
+#define INPUT_SWITCH INPUT
+#endif // ACTIVE_LOW
 
 // ===================================
 // Program state variables and objects
 // ===================================
 // TODO: Refactor globals (and utils) into an object(?)
 // "private"
-unsigned char togglePrevious;       ///< toggle state of previously received RC command.
-unsigned char toggle;               ///< toggle state of current RC command.
-unsigned char address;              ///< code for the current RC address.
-unsigned char command;              ///< code for the current RC command.
-unsigned long consecutivePressed;   ///< counter for consecutive RC command.
+unsigned char rcAddress;            ///< code for the current RC address.
+unsigned char rcCommand;            ///< code for the current RC command.
+unsigned char rcToggle;             ///< toggle state of current RC command.
+unsigned char rcTogglePrevious;     ///< toggle state of previously received RC command.
+unsigned long rcConsecutivePressed; ///< counter for consecutive RC commands.
 
 // "exposable"
 bool isMute;    ///< mute state of the system.
@@ -61,43 +69,40 @@ void setup()
     pinMode(PWR_PIN, OUTPUT);
     pinMode(RC_CMD_PIN, OUTPUT);
 
-    pinMode(VOL_UP_SWITCH, INPUT_PULLUP);
-    pinMode(VOL_DN_SWITCH, INPUT_PULLUP);
-    pinMode(SOURCE_UP_SWITCH, INPUT_PULLUP);
-    pinMode(SOURCE_DN_SWITCH, INPUT_PULLUP);
-    pinMode(MUTE_SWITCH, INPUT_PULLUP);
-    pinMode(PWR_SWITCH, INPUT_PULLUP);
+    pinMode(VOL_UP_SWITCH, INPUT_SWITCH);
+    pinMode(VOL_DN_SWITCH, INPUT_SWITCH);
+    pinMode(SOURCE_UP_SWITCH, INPUT_SWITCH);
+    pinMode(SOURCE_DN_SWITCH, INPUT_SWITCH);
+    pinMode(MUTE_SWITCH, INPUT_SWITCH);
+    pinMode(PWR_SWITCH, INPUT_SWITCH);
 
     // Set intial state
     digitalWrite(RC_CMD_PIN, HIGH);
-    togglePrevious = 99; // state of rc5.toggle on initialization seems to be 0, so...
-    consecutivePressed = 0;
-    setPower(false);    // makes sure the power is off on reset.
+    rcTogglePrevious = 99; // state of rc5.toggle on initialization seems to be 0, so...
+    rcConsecutivePressed = 0;
+    setPower(false);     // makes sure the power is off on reset.
 }
 
 void loop()
 {
-    if (rc5->read(&toggle, &address, &command) && (address == DEVICE_PREAMP))
+    if (rc5->read(&rcToggle, &rcAddress, &rcCommand) && (rcAddress == DEVICE_PREAMP))
     {
-        // Note: Generically blinking the LED blocks the redundant command as the
-        // redundant command is sent within 100ms.
-
 #ifdef PDEBUG
         Serial.println("");
-        Serial.print("device: ");
-        Serial.print(address);
-        Serial.print(" command: ");
-        Serial.print(command);
+        Serial.print("rcAddress: ");
+        Serial.print(rcAddress);
+        Serial.print(" rcCommand: ");
+        Serial.print(rcCommand);
         Serial.print(" [");
-        Serial.print(toggle);
+        Serial.print(rcToggle);
         Serial.print("]");
         Serial.println();
 #endif // PDEBUG
 
         if (isPower)
         {
-            commandAck();
-            switch (command)
+            rcCommandAck();
+            switch (rcCommand)
             {
             case CMD_VOLUP:
                 volCmd(UP);
@@ -118,12 +123,11 @@ void loop()
                 ;
             }
         }
-        else if (command == CMD_PWR)
+        else if (rcCommand == CMD_PWR)
         {
-            commandAck();
+            rcCommandAck();
             pwrCmd();
         }
-        togglePrevious = toggle;
+        rcTogglePrevious = rcToggle;
     }
 }
-

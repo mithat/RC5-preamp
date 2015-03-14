@@ -60,9 +60,8 @@ License
 -------
 The RC5-preamp source code is licensed under the GPLv3. Details are in 
 the file COPYING. Guy Carpenter's [RC5 library](https://github.com/guyc/RC5) 
-carries its own license (BSD at the time of this writing) as does the Arduino
-platform (GPL/LGPL for software, Creative Commons Attribution Share-Alike 
-license for hardware at the time of this writing).
+carries its own license (BSD at the time of this writing) as does the [Arduino
+platform](http://arduino.cc/en/Main/FAQ) (GPL/LGPL for software, Creative Commons Attribution Share-Alike license for hardware at the time of this writing).
 
 Be sure you know what freedoms and obligations this brings you.
 

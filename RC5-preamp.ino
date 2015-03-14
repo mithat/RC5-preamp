@@ -19,12 +19,14 @@
 
 #define PDEBUG  // Print DEBUG stuff to Serial. Comment out or #undef for production.
 
-#include <RC5.h>
 #include "config.h"
+#include "utils.h"
+#include <RC5.h>
 
 // ===================================
 // Program state variables and objects
 // ===================================
+// TODO: Refactor globals and utils into a class(?)
 // "private"
 unsigned long t0;
 unsigned char togglePrevious;
@@ -36,98 +38,8 @@ unsigned char command;
 // "exposable"
 bool isMute;
 bool isPower;
-RC5 rc5(IR_PIN);
 
-// ====================
-// Functions
-// ====================
-
-/** Pulse the specified output pin for the given time in msec. */
-void pulsePin(uint8_t pin, unsigned long len)
-{
-    digitalWrite(pin, HIGH);
-    delay(len);
-    digitalWrite(pin, LOW);
-}
-
-/** Acknowledge receipt of a valid RC command */
-void commandAck()
-{
-    digitalWrite(RC_CMD_PIN, !digitalRead(RC_CMD_PIN));
-}
-
-/** Set the mute state of the system. */
-void setMute(bool mute)
-{
-    isMute = mute;
-    digitalWrite(MUTE_PIN, isMute);
-}
-
-/** Set the power state of the system. */
-void setPower(bool pwr)
-{
-    // unmute if going from off to on state
-    if (!isPower && pwr)
-    {
-        setMute(false);
-    }
-    isPower = pwr;
-    digitalWrite(PWR_PIN, isPower);
-}
-
-/**
- * Handle a volume event.
- */
-void volCmd(bool direction)
-{
-    setMute(false);
-    pulsePin(direction == UP ? VOL_UP_PIN : VOL_DN_PIN, PULSE_LEN);
-}
-
-/**
- * Handle a mute event.
- * Toggle the mute state on explicit keypress.
- */
-void muteCmd()
-{
-    if (toggle != togglePrevious)
-    {
-        setMute(!isMute);
-    }
-}
-
-/**
- * Handle an source select event.
- */
-void sourceCmd(bool direction)
-{
-    if (toggle != togglePrevious)   // if new press
-    {
-        consecutivePressed = 0;
-        pulsePin(direction == UP ? SOURCE_UP_PIN : SOURCE_DN_PIN, PULSE_LEN);
-    }
-    else                            // if key held down,
-    {
-        consecutivePressed++;
-        if (consecutivePressed % PULSE_SKIP == 0)    // execute only every PULSE_SKIP pulses
-        {
-            pulsePin(direction == UP ? SOURCE_UP_PIN : SOURCE_DN_PIN, PULSE_LEN);
-            Serial.println(consecutivePressed);
-        }
-    }
-}
-
-/**
- * Handle a power event.
- * Toggle power on explicit keypress.
- */
-void pwrCmd()
-{
-    if (toggle != togglePrevious)
-    {
-        setPower(!isPower);
-    }
-}
+RC5 *rc5;
 
 // ====================
 // Action!
@@ -138,6 +50,8 @@ void setup()
     Serial.begin(9600);
     Serial.println("Started");
 #endif // PDEBUG
+
+    rc5 = new RC5(IR_PIN);
 
     // Config I/O
     pinMode(VOL_UP_PIN, OUTPUT);
@@ -164,7 +78,7 @@ void setup()
 
 void loop()
 {
-    if (rc5.read(&toggle, &address, &command) && (address == DEVICE_PREAMP))
+    if (rc5->read(&toggle, &address, &command) && (address == DEVICE_PREAMP))
     {
         // Note: Generically blinking the LED blocks the redundant command as the
         // redundant command is sent within 100ms.

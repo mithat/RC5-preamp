@@ -26,18 +26,17 @@
 // ===================================
 // Program state variables and objects
 // ===================================
-// TODO: Refactor globals and utils into a class(?)
+// TODO: Refactor globals (and utils) into an object(?)
 // "private"
-unsigned long t0;
-unsigned char togglePrevious;
-unsigned char toggle;
-unsigned long consecutivePressed;   // counter for consecutive hold-down events.
-unsigned char address;
-unsigned char command;
+unsigned char togglePrevious;       ///< toggle state of previously received RC command.
+unsigned char toggle;               ///< toggle state of current RC command.
+unsigned char address;              ///< code for the current RC address.
+unsigned char command;              ///< code for the current RC command.
+unsigned long consecutivePressed;   ///< counter for consecutive RC command.
 
 // "exposable"
-bool isMute;
-bool isPower;
+bool isMute;    ///< mute state of the system.
+bool isPower;   ///< power state of the system.
 
 RC5 *rc5;
 
@@ -127,3 +126,4 @@ void loop()
         togglePrevious = toggle;
     }
 }
+

@@ -1,3 +1,6 @@
+/** @file utils.cpp
+ * Miscellaneous utilities for RC-preamp. */
+
 /*
  * Copyright (C) 2015 Mithat Konar (mithat ~at~ mithatkonar.com).
  *
@@ -20,7 +23,6 @@
 #include "utils.h"
 #include "config.h"
 
-extern unsigned long t0;
 extern unsigned char togglePrevious;
 extern unsigned char toggle;
 extern unsigned long consecutivePressed;
@@ -29,7 +31,12 @@ extern unsigned char command;
 extern bool isMute;
 extern bool isPower;
 
-/** Pulse the specified output pin for the given time in msec. */
+/**
+ * Pulse the specified output pin for the given number of msec.
+ * @param  pin  The pin to pulse.
+ * @param  len  Milliseconds to pulse.
+ * \return void
+ */
 void pulsePin(uint8_t pin, unsigned long len)
 {
     digitalWrite(pin, HIGH);
@@ -37,20 +44,34 @@ void pulsePin(uint8_t pin, unsigned long len)
     digitalWrite(pin, LOW);
 }
 
-/** Acknowledge receipt of a valid RC command */
+/**
+ * Acknowledge receipt of a valid RC command.
+ * Toggle the state of the RC_CMD_PIN.
+ * @return void
+ */
 void commandAck()
 {
     digitalWrite(RC_CMD_PIN, !digitalRead(RC_CMD_PIN));
 }
 
-/** Set the mute state of the system. */
+/**
+ * Set the mute state of the system.
+ * Set MUTE_PIN HIGH or LOW.
+ * @param  mute true for muted, false for unmuted.
+ * @return void
+ */
 void setMute(bool mute)
 {
     isMute = mute;
     digitalWrite(MUTE_PIN, isMute);
 }
 
-/** Set the power state of the system. */
+/**
+ * Set the power state of the system.
+ * Set PWR_PIN HIGH or LOW. Unmute the system if going from off to on.
+ * @param  pwr  true to turn on, false to turn off.
+ * @return void
+ */
 void setPower(bool pwr)
 {
     // unmute if going from off to on state
@@ -64,6 +85,9 @@ void setPower(bool pwr)
 
 /**
  * Handle a volume event.
+ * Pulse VOL_UP_PIN or VOL_DN_PIN. Repeat on consecutive events.
+ * @param  direction    UP or DOWN
+ * @return void
  */
 void volCmd(bool direction)
 {
@@ -73,7 +97,8 @@ void volCmd(bool direction)
 
 /**
  * Handle a mute event.
- * Toggle the mute state on explicit keypress.
+ * Toggle the mute state on explicit keypress (don't repeat on consecutive events).
+ * @return void
  */
 void muteCmd()
 {
@@ -84,7 +109,10 @@ void muteCmd()
 }
 
 /**
- * Handle an source select event.
+ * Handle a source select event.
+ * Pulse SOURCE_UP_PIN or SOURCE_DN_PIN. Repeat at a low rate on consecutive events.
+ * @param  direction    UP or DOWN
+ * @return void
  */
 void sourceCmd(bool direction)
 {
@@ -106,7 +134,8 @@ void sourceCmd(bool direction)
 
 /**
  * Handle a power event.
- * Toggle power on explicit keypress.
+ * Toggle power on explicit keypress (don't repeat on consecutive events).
+ * @return void
  */
 void pwrCmd()
 {

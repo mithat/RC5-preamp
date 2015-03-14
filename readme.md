@@ -1,67 +1,154 @@
 RC5-preamp
 ==========
-_Because remote controlled audio is free and for the people._
+_Because remote controlled audio is free and for the people.™_
 
-RC5-preamp is an Arduino-based remote control processor designed to make it
-easy to integrate basic remote control functionality into audio preamplifier
-projects.
+RC5-preamp is an Arduino sketch that's intended to make integrating basic 
+remote control functionality into audio preamplifier projects fun and painless.
 
 Requirements
 ------------
 You will need an [Arduino UNO](http://www.arduino.cc/en/Main/arduinoBoardUno), 
 Guy Carpenter's [RC5 library](https://github.com/guyc/RC5), an IR remote 
-control that can send RC5 preamplifier commands (I used an [RCA RCRN08GR](http://www.rcaaudiovideo.com/remotes/6-8-devices/?sku=RCRN08GR) 
-during development), and supporting hardware that will be 
-documented below.
+control that can send RC5 preamplifier commands (I used an 
+[RCA RCRN08GR](http://www.rcaaudiovideo.com/remotes/6-8-devices/?sku=RCRN08GR) 
+during development), and supporting hardware as documented below.
 
-This project was built using Arduino 1.6.1. Other versions may work but are
-not supported.
+RC5-preamp was built using Arduino 1.6.1. Other Arduino versions may work to
+build RC5-preamp but are not supported.
+
+Features
+--------
+TODO: Features description
 
 Use
 ---
-### Hardware interface
-Consult TODO for i/o pin mappings. Descriptions of each are given below.
+Descriptions of each I/O pin are given below. Consult `config.h` for pin
+mappings. 
+
+All inputs and outputs are, in Arduino parlance, 'digital'.
+
+#### User interface
+
+**The input switches listed here are not yet implemented!**
+
+Pin name           | Type         | Function
+------------------ | ------------ | -------------------------------
+`VOL_UP_SWITCH`    | input switch | When pressed, pulses `VOL_UP_PIN`
+`VOL_DN_SWITCH`    | input switch | When pressed, pulses `VOL_DN_PIN`
+`SOURCE_UP_SWITCH` | input switch | When pressed, pulses `SOURCE_UP_PIN`
+`SOURCE_DN_SWITCH` | input switch | When pressed, pulses `SOURCE_DN_PIN`
+`MUTE_SWITCH`      | input switch | Toggles mute state of the system. Sets `MUTE_PIN` `HIGH` or `LOW` as needed.
+`PWR_SWITCH`       | input switch | Toggles power state of the system. Sets `PWR_PIN` `HIGH` or `LOW` as needed.
+`RC_CMD_PIN`       | output       | Toggles state when a valid command is received.
+
+All switches are normally open momentary types (i.e., LOW when not not pressed) 
+and _need to be electronically (i.e., hardware) debounced_.
+
+Note that if you want to use `RC_CMD_PIN` to flash an LED when a remote control 
+command is received, you must trigger the LED on both rising and falling edges.
+
+#### H/W
+
+Pin name           | Type   | Function
+------------------ | ------ | -------------------------------
+`IR_PIN 2`         | input  | Pin to which the IR decoder chip connects.
+`VOL_UP_PIN`       | output | Pulses high when volume should increase.
+`VOL_DN_PIN`       | output | Pulses high when volume should decrease.
+`SOURCE_UP_PIN`    | output | Pulses high when input should cycle to the next input source.
+`SOURCE_DN_PIN`    | output | Pulses high when input should cycle to the previous source.
+`MUTE_PIN`         | output | High when system should mute, low otherwise
+`PWR_PIN`          | output | High when system is in powered-up state, low otherwise
+
+The IR decoder chip should be a 36kHz
+device. The [Vishay TSOP34136](http://www.vishay.com/docs/82490/tsop321.pdf)
+seems to work well.
+
+`VOL_UP_PIN` and `VOL_DN_PIN` will each pulse for about 150 msec on a 
+corresponding event. You should be able to connect `VOL_UP_PIN` and 
+`VOL_DN_PIN` to a motorized potentiometer through an 
+[H-bridge](http://en.wikipedia.org/wiki/H_bridge) or to a digital 
+potentiometer through appropriate glue logic.
+
+_Don't attempt to use `VOL_UP_PIN` and `VOL_DN_PIN` to drive a motorized 
+potentiometer directly!_ It won't work and you may fry your Arduino. A circuit 
+using available motorized potentiometers is under development.
+
+If you use a digital potentiometer, you'll need to implement the logic in front
+of it that senses the command pulses and deliver the appropriate control
+signals to the digital potentiometer. A circuit using the
+[Maxim DS1882](http://www.maximintegrated.com/en/products/analog/data-converters/digital-potentiometers/DS1882.html/tb_tab0)) 
+and another Arduino for interfacing is under development.
+
+`SOURCE_UP_PIN` and `SOURCE_DN_PIN` will each pulse for about 150 msec on a
+corresponding event. Design of an appropriate input switching circuit using 
+relay switching under control by another Arduino is under development.
+
+The `MUTE_PIN` can be used to control a digital volume potentiometer's 
+attenuation or an additional muting circuit.
+
+Since RC5-preamp wants to be on continuously (see **Behavior** below), it's 
+expected that you'll use `PWR_PIN` to control the power delivered to the rest 
+of the preamp---possibly via relay switching of a separate main power 
+transformer.
 
 ### Behavior
-RC5-preamp does not remember the state of the system when power cycled or 
-reset. It was designed to be continuously powered, even when the system is
-"off". Doing otherwise would make turning on power via remote control a little 
+RC5-preamp was designed to be powered continuously, even when the preamp is 
+"off". Doing otherwise would make turning power on via remote control a mite
 tricky.
 
+RC5-preamp does not remember the state of the system when the power is cycled 
+or the processor is reset. On powerup/reset, `PWR_PIN` will be `LOW`
+(i.e., power off) and `MUTE_PIN` will be in a `LOW` (i.e., umnuted) state.
+
 RC5-preamp does not handle power on/off muting. This functionality should be 
-built into the muting hardware if needed.
+built into the muting hardware if needed. (TODO: Reconsider adding power on/off 
+muting.)
 
-On powerup/reset, TODO will be LOW (power off), and TODO will be in a LOW (umnuted) state.
+A power button press or remote control signal toggles `PWR_PIN` `HIGH` (on) or 
+`LOW` (off).  When in the off state, RC5-preamp is inhibited from processing 
+commands other than power button and remote control signals. `PWR_PIN` can be 
+used to control the main power delivered to the preamp---possibly via relay
+control.
 
-A power button press or remote control signal enables and disabled RC5-preamp from
-processing other commands; it also sets TODO high (on) or low (off). This
-can be used to control the power delivered to the preamplifier's other circuits.
+Volume up/down button presses or remote control signals will pulse the 
+`VOL_UP_PIN` or `VOL_DN_PIN` outputs (whichever is appropriate) for
+about 150 msec on each press. Holding down any of these of these will pulse
+the appropriate output about every 150 msec. If the system is muted when a 
+volume up/down even happens, it will be unmuted.
 
-Volume up/down button presses or remote control signals pulse the TODO lines on
-each press for 100 msec. If you hold down one of these, the appropriate line
-will be pulsed every 100 msec until the button is released. If the system is
-muted when a volume up/down even happens, it will be unmuted.
-
-A mute button press or remote control signals will toggle the mute state of the
+A mute button press or remote control signal will toggle the mute state of the
 system.
 
-Source up/down button presses or source up remote control signals pulse the 
-TODO lines on each press for 500 msec. Hold down one of these will pulse the 
-appropriate line every 500 msec. Note that there is no remote control source 
-down signal. I have not found an instance of an RC5 remote that provides 
-this  functionality, nor does there appear to be a standard for it, so it is
-unimplemented.
+Source up/down button presses or source up remote control signals will pulse
+the `SOURCE_UP_PIN` or `SOURCE_DN_PIN` outputs (whichever is appropriate) for
+about 150 msec on each press. Holding down any of these of these will pulse
+the appropriate output about every 500 msec. Note that there is no remote 
+control source down signal. I have not found an instance of an RC5 remote that 
+provides  this  functionality, nor does there appear to be a standard for it, 
+so it's not implemented.
 
 ### Software 
-Compile and upload this project onto your UNO using your favorite method, making sure the 
-RC5 library is in `../libraries`.
+Compile and upload this project onto your UNO using your favorite method, 
+making sure the  RC5 library is in `../libraries`.
+
+For development, I used Sudar's 
+[Arduino makefile](https://github.com/sudar/Arduino-Makefile) in a customized 
+C++ IDE. The project's child makefile is included in this distribution. Using
+the makefile is not required; the sketch should build just fine in the vanilla 
+Arduino IDE.
+
+With appropriate changes to the source code, you should be able adapt the 
+source code to other Arduinos, provided it can support the desired I/O. If you
+do so, be sure to share the love. (See **License** below.)
 
 License
 -------
 The RC5-preamp source code is licensed under the GPLv3. Details are in 
 the file COPYING. Guy Carpenter's [RC5 library](https://github.com/guyc/RC5) 
-carries its own license (BSD at the time of this writing) as does the [Arduino
-platform](http://arduino.cc/en/Main/FAQ) (GPL/LGPL for software, Creative Commons Attribution Share-Alike license for hardware at the time of this writing).
+carries its own license (BSD at the time of this writing) as does the
+[Arduino platform](http://arduino.cc/en/Main/FAQ) (GPL/LGPL for software, 
+Creative Commons Attribution Share-Alike license for hardware at the time of 
+this writing).
 
 Be sure you know what freedoms and obligations this brings you.
 

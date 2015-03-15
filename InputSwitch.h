@@ -1,5 +1,8 @@
-/*
- * Copyright (C) 2015 Mithat Konar (mithat ~at~ mithatkonar.com).
+/**
+ * @file
+ * @author    Mithat Konar (mithat ~at~ mithatkonar.com)
+ * @copyright Copyright (C) 2015 Mithat Konar
+ * @section   LICENSE
  *
  * This file is part of RC-preamp.
  *
@@ -30,35 +33,33 @@
 class InputSwitch
 {
 public:
-    /** Parmeterized constructor.
-    * For switches not associated with an output.
-     * \param inPin         The pin associated with this switch.
-     * \param outPin        The output pin acted on by ::action or UCHAR_MAX for none.
-     * \param activeState   HIGH if switch is active high, LOW otherwise.
-     * \param debounceLen   msecs needed to debounce switch
+    /** Constructor for switches not associated with an output.
+     * @param inPin         The pin associated with this switch.
+     * @param outPin        The output pin acted on by ::action or UCHAR_MAX for none.
+     * @param activeState   HIGH if switch is active high, LOW otherwise.
+     * @param debounceLen   msecs needed to debounce switch
      */
     InputSwitch(uint8_t inPin, uint8_t activeState, unsigned long debounceLen);
 
-    /** Parmeterized constructor.
-     * For switches not associated with an output.
-     * \param inPin         The pin associated with this switch.
-     * \param outPin        The output pin acted on by ::action or UCHAR_MAX for none.
-     * \param activeState   HIGH if switch is active high, LOW otherwise.
-     * \param debounceLen   msecs needed to debounce switch
+    /** Carmeterized constructor for switches not associated with an output.
+     * @param inPin         The pin associated with this switch.
+     * @param outPin        The output pin acted on by ::action or UCHAR_MAX for none.
+     * @param activeState   HIGH if switch is active high, LOW otherwise.
+     * @param debounceLen   msecs needed to debounce switch
      */
     InputSwitch(uint8_t inPin, uint8_t outPin, uint8_t activeState, unsigned long debounceLen);
 
-    // Accessors are currently YAGNI.
+    // Accessors/mutators are YAGNI.
 
     /** The action associated with this switch. Pure virtual.
-     * \return void
+     * @return void
      */
-    // No, really, this should be a function pointer, but I don't know
-    // if that's supported in Arduino.
+    // TODO: No, really, this should be a function pointer rather than use derived singletons,
+    // but I don't know if they're supported in Arduino.
     virtual void action() =0;
 
     /** Poll the switch and take action if needed. Virtual.
-     * \return true iff action was taken.
+     * @return true iff action was taken.
      */
     virtual bool poll();
 

@@ -1,7 +1,9 @@
-/** \file */
-
-/*
- * Copyright (C) 2015 Mithat Konar (mithat ~at~ mithatkonar.com).
+/**
+ * @file
+ * @author    Mithat Konar (mithat ~at~ mithatkonar.com)
+ * @copyright Copyright (C) 2015 Mithat Konar
+ * @brief     Main Arduino file.
+ * @section   LICENSE
  *
  * This file is part of RC-preamp.
  *

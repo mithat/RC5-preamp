@@ -1,10 +1,9 @@
-/** @file */
-
-#ifndef UTILS_H
-#define UTILS_H
-
-/*
- * Copyright (C) 2015 Mithat Konar (mithat ~at~ mithatkonar.com).
+/**
+ * @file
+ * @author    Mithat Konar (mithat ~at~ mithatkonar.com)
+ * @copyright Copyright (C) 2015 Mithat Konar
+ * @brief     Utilites
+ * @section   LICENSE
  *
  * This file is part of RC-preamp.
  *
@@ -21,6 +20,9 @@
  * You should have received a copy of the GNU General Public License
  * along with RC-preamp.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <Arduino.h>
 

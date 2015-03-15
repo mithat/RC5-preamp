@@ -40,8 +40,9 @@ bool isMute;    ///< mute state of the system.
 bool isPower;   ///< power state of the system.
 RC5 *rc5;       ///< remote control decoder
 
-#define NUM_SWITCHES 6
+#define NUM_SWITCHES 5
 InputSwitch* switchArr[NUM_SWITCHES];
+InputSwitch* pwrSwitch;
 
 // switch states
 int previousPwr = INACTIVE;
@@ -74,12 +75,12 @@ void setup()
 
     // Instantiate system objects.
     rc5 = new RC5(IR_PIN);
+    pwrSwitch = new PwrSwitch();
     switchArr[0] = new VolUpSwitch();
     switchArr[1] = new VolDnSwitch();
     switchArr[2] = new SrcUpSwitch();
     switchArr[3] = new SrcDnSwitch();
-    switchArr[4] = new PwrSwitch();
-    switchArr[5] = new MuteSwitch();
+    switchArr[4] = new MuteSwitch();
 
     // Set intial state
     digitalWrite(RC_CMD_PIN, HIGH);
@@ -106,28 +107,31 @@ void loop()
         rcProcessCommand();
     }
 
-    // Poll the switches because the remote control library may use timer interrupts.
-    if (digitalRead(PWR_SWITCH) == ACTIVE)
+//    // Poll the switches because the remote control library may use timer interrupts.
+//    if (digitalRead(PWR_SWITCH) == ACTIVE)
+//    {
+//        delay(DEBOUNCE_LEN);
+//        if ((digitalRead(PWR_SWITCH) == ACTIVE) && (previousPwr == INACTIVE))
+//        {
+//            setPower(!isPower);
+//            previousPwr = ACTIVE;
+//        }
+//    }
+//    else
+//    {
+//        previousPwr = INACTIVE;
+//    }
+
+    // Unconditionally poll power switch.
+    pwrSwitch->poll();
+
+    // Poll remaining switches
+    if (isPower)
     {
-        delay(DEBOUNCE_LEN);
-        if ((digitalRead(PWR_SWITCH) == ACTIVE) && (previousPwr == INACTIVE))
+        for (int i = 0; i < NUM_SWITCHES; i++)
         {
-            setPower(!isPower);
-            previousPwr = ACTIVE;
+            if (switchArr[i]->poll())
+                break;
         }
-    }
-    else
-    {
-        previousPwr = INACTIVE;
-    }
-
-    if (digitalRead(SOURCE_UP_PIN))
-    {
-        Serial.println("SOURCE_UP_PIN");
-    }
-
-    for (int i = 0; i < NUM_SWITCHES; i++)
-    {
-        if (switchArr[i]->poll()) break;
     }
 }

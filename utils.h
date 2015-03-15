@@ -24,6 +24,16 @@
 
 #include <Arduino.h>
 
+/** Parameters from decoded RC command. */
+struct RCParams
+{
+    unsigned char address;            ///< code for the current RC address.
+    unsigned char command;            ///< code for the current RC command.
+    unsigned char toggle;             ///< toggle state of current RC command.
+    unsigned char togglePrevious;     ///< toggle state of previously received RC command.
+    unsigned long consecutivePressed; ///< counter for consecutive RC commands.
+};
+
 // ====================
 // Utility functions
 // ====================

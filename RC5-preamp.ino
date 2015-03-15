@@ -1,4 +1,4 @@
-/** @file */
+/** \file */
 
 /*
  * Copyright (C) 2015 Mithat Konar (mithat ~at~ mithatkonar.com).
@@ -27,18 +27,13 @@
 // ===================================
 // Program state variables and objects
 // ===================================
-// TODO: Refactor state globals and utils into an object(?)
-// remote control
-unsigned char rcAddress;            ///< code for the current RC address.
-unsigned char rcCommand;            ///< code for the current RC command.
-unsigned char rcToggle;             ///< toggle state of current RC command.
-unsigned char rcTogglePrevious;     ///< toggle state of previously received RC command.
-unsigned long rcConsecutivePressed; ///< counter for consecutive RC commands.
+// TODO: Refactor state globals and utils into an object(s)(?)
+// TODO: Refactor all RC stuff into an object(?)
 
-// system
 bool isMute;    ///< mute state of the system.
 bool isPower;   ///< power state of the system.
 RC5 *rc5;       ///< remote control decoder
+RCParams rc;    ///< remote control decoder params
 
 #define NUM_SWITCHES 5
 InputSwitch* switchArr[NUM_SWITCHES];
@@ -84,23 +79,23 @@ void setup()
 
     // Set intial state
     digitalWrite(RC_CMD_PIN, HIGH);
-    rcTogglePrevious = 99; // state of rc5.toggle on initialization seems to be 0, so...
-    rcConsecutivePressed = 0;
+    rc.togglePrevious = 99; // state of rc5.toggle on initialization seems to be 0, so...
+    rc.consecutivePressed = 0;
     setPower(false);     // makes sure the power is off on reset.
 }
 
 void loop()
 {
-    if (rc5->read(&rcToggle, &rcAddress, &rcCommand) && (rcAddress == DEVICE_PREAMP))
+    if (rc5->read(&rc.toggle, &rc.address, &rc.command) && (rc.address == DEVICE_PREAMP))
     {
 #ifdef PDEBUG
         Serial.println("");
-        Serial.print("rcAddress: ");
-        Serial.print(rcAddress);
-        Serial.print(" rcCommand: ");
-        Serial.print(rcCommand);
+        Serial.print("rc.address: ");
+        Serial.print(rc.address);
+        Serial.print(" rc.command: ");
+        Serial.print(rc.command);
         Serial.print(" [");
-        Serial.print(rcToggle);
+        Serial.print(rc.toggle);
         Serial.print("]");
         Serial.println();
 #endif // PDEBUG

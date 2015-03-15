@@ -19,36 +19,32 @@
  * along with RC-preamp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <RC5.h>
 #include "config.h"
 #include "utils.h"
-#include <RC5.h>
-
-#ifdef ACTIVE_LOW
-#define ACTIVE LOW
-#define INACTIVE HIGH
-#define INPUT_SWITCH INPUT_PULLUP
-#else
-#define ACTIVE HIGH
-#define INACTIVE LOW
-#define INPUT_SWITCH INPUT
-#endif // ACTIVE_LOW
+#include "switches.h"
 
 // ===================================
 // Program state variables and objects
 // ===================================
-// TODO: Refactor globals (and utils) into an object(?)
-// "private"
+// TODO: Refactor state globals and utils into an object(?)
+// remote control
 unsigned char rcAddress;            ///< code for the current RC address.
 unsigned char rcCommand;            ///< code for the current RC command.
 unsigned char rcToggle;             ///< toggle state of current RC command.
 unsigned char rcTogglePrevious;     ///< toggle state of previously received RC command.
 unsigned long rcConsecutivePressed; ///< counter for consecutive RC commands.
 
-// "exposable"
+// system
 bool isMute;    ///< mute state of the system.
 bool isPower;   ///< power state of the system.
+RC5 *rc5;       ///< remote control decoder
 
-RC5 *rc5;
+#define NUM_SWITCHES 6
+InputSwitch* switchArr[NUM_SWITCHES];
+
+// switch states
+int previousPwr = INACTIVE;
 
 // ====================
 // Action!
@@ -59,8 +55,6 @@ void setup()
     Serial.begin(9600);
     Serial.println("Started");
 #endif // PDEBUG
-
-    rc5 = new RC5(IR_PIN);
 
     // Config I/O
     pinMode(VOL_UP_PIN, OUTPUT);
@@ -77,6 +71,15 @@ void setup()
     pinMode(SOURCE_DN_SWITCH, INPUT_SWITCH);
     pinMode(MUTE_SWITCH, INPUT_SWITCH);
     pinMode(PWR_SWITCH, INPUT_SWITCH);
+
+    // Instantiate system objects.
+    rc5 = new RC5(IR_PIN);
+    switchArr[0] = new VolUpSwitch();
+    switchArr[1] = new VolDnSwitch();
+    switchArr[2] = new SrcUpSwitch();
+    switchArr[3] = new SrcDnSwitch();
+    switchArr[4] = new PwrSwitch();
+    switchArr[5] = new MuteSwitch();
 
     // Set intial state
     digitalWrite(RC_CMD_PIN, HIGH);
@@ -101,5 +104,30 @@ void loop()
         Serial.println();
 #endif // PDEBUG
         rcProcessCommand();
+    }
+
+    // Poll the switches because the remote control library may use timer interrupts.
+    if (digitalRead(PWR_SWITCH) == ACTIVE)
+    {
+        delay(DEBOUNCE_LEN);
+        if ((digitalRead(PWR_SWITCH) == ACTIVE) && (previousPwr == INACTIVE))
+        {
+            setPower(!isPower);
+            previousPwr = ACTIVE;
+        }
+    }
+    else
+    {
+        previousPwr = INACTIVE;
+    }
+
+    if (digitalRead(SOURCE_UP_PIN))
+    {
+        Serial.println("SOURCE_UP_PIN");
+    }
+
+    for (int i = 0; i < NUM_SWITCHES; i++)
+    {
+        if (switchArr[i]->poll()) break;
     }
 }

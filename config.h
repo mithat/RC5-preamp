@@ -33,6 +33,7 @@
 
 #define PULSE_LEN  150  // Number of milliseconds output pulses should last.
 #define PULSE_SKIP 5    // Number of pulses to skip in "long-gap" repetitions.
+#define DEBOUNCE_LEN 20 // Number of milliseconds to debounce switches.
 
 // ====================
 // Constants
@@ -70,5 +71,15 @@
 // Misc.
 #define DN false    // Indicates downward travel for volume and input select.
 #define UP true     // Indicates upward travel for volume and input select.
+
+#ifdef ACTIVE_LOW
+#define ACTIVE LOW
+#define INACTIVE HIGH
+#define INPUT_SWITCH INPUT_PULLUP
+#else
+#define ACTIVE HIGH
+#define INACTIVE LOW
+#define INPUT_SWITCH INPUT
+#endif // ACTIVE_LOW
 
 #endif

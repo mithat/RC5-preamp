@@ -20,9 +20,9 @@
  * along with RC-preamp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "InputSwitch.h"
+#include "InSwitch.h"
 
-InputSwitch::InputSwitch(uint8_t inPin, uint8_t activeState, unsigned long debounceLen)
+InSwitch::InSwitch(uint8_t inPin, uint8_t activeState, unsigned long debounceLen)
 {
     m_inPin = inPin;
     m_outPin = UCHAR_MAX;
@@ -30,15 +30,7 @@ InputSwitch::InputSwitch(uint8_t inPin, uint8_t activeState, unsigned long debou
     m_debounceLen = debounceLen;
 }
 
-InputSwitch::InputSwitch(uint8_t inPin, uint8_t outPin, uint8_t activeState, unsigned long debounceLen)
-{
-    m_inPin = inPin;
-    m_outPin = outPin;
-    m_activeState = activeState;
-    m_debounceLen = debounceLen;
-}
-
-bool InputSwitch::poll()
+bool InSwitch::poll()
 {
     if (digitalRead(m_inPin) == m_activeState)
     {

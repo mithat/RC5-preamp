@@ -20,34 +20,27 @@
  * along with RC-preamp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INPUTSWITCH_H
-#define INPUTSWITCH_H
+#ifndef INSWITCH_H
+#define INSWITCH_H
 
 #include <limits.h>
 #include <Arduino.h>
 
 /**
  * Abstract encapsulation of an input switch.
+ * An InSwitch triggers some action when it is active while being polled.
  * Non-abstract instances will typically be singletons.
  */
-class InputSwitch
+class InSwitch
 {
 public:
-    /** Constructor for switches not associated with an output.
+    /** Constructor for switches.
      * @param inPin         The pin associated with this switch.
      * @param outPin        The output pin acted on by ::action or UCHAR_MAX for none.
      * @param activeState   HIGH if switch is active high, LOW otherwise.
      * @param debounceLen   msecs needed to debounce switch
      */
-    InputSwitch(uint8_t inPin, uint8_t activeState, unsigned long debounceLen);
-
-    /** Carmeterized constructor for switches not associated with an output.
-     * @param inPin         The pin associated with this switch.
-     * @param outPin        The output pin acted on by ::action or UCHAR_MAX for none.
-     * @param activeState   HIGH if switch is active high, LOW otherwise.
-     * @param debounceLen   msecs needed to debounce switch
-     */
-    InputSwitch(uint8_t inPin, uint8_t outPin, uint8_t activeState, unsigned long debounceLen);
+    InSwitch(uint8_t inPin, uint8_t activeState, unsigned long debounceLen);
 
     // Accessors/mutators are YAGNI.
 
@@ -73,4 +66,4 @@ private:
 
 };
 
-#endif // INPUTSWITCH_H
+#endif // INSWITCH_H

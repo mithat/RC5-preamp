@@ -67,10 +67,11 @@
 #define CMD_VOLUP     16
 #define CMD_VOLDN     17
 #define CMD_MUTE      13
-#define CMD_INPUT     59    // This might be contentious. TODO: Additional testing of CMD_INPUT.
+#define CMD_INPUT     59    // This might be contentious. TODO: Additional testing of RC CMD_INPUT (59).
 #define CMD_PWR       12
 
-// Misc.
+
+/* Maybe you don't play with the rest of these, ok? */
 #define DN false    // Indicates downward travel for volume and input select.
 #define UP true     // Indicates upward travel for volume and input select.
 
@@ -84,4 +85,4 @@
 #define INPUT_SWITCH INPUT
 #endif // ACTIVE_LOW
 
-#endif
+#endif // CONFIG_H

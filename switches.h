@@ -24,74 +24,78 @@
 #ifndef SWITCHES_H
 #define SWITCHES_H
 
-#include "InputSwitch.h"
+#include "InSwitch.h"
+#include "InSwitchNoRepeat.h"
 #include "config.h"
 #include "utils.h"
 
+extern bool isPower;
+extern bool isMute;
+
 /** Pulse VOL_UP_PIN when VOL_UP_SWITCH is activated. */
-class VolUpSwitch : public InputSwitch
+class VolUpSwitch : public InSwitch
 {
 public:
-    VolUpSwitch() : InputSwitch(VOL_UP_SWITCH, VOL_UP_PIN, ACTIVE, DEBOUNCE_LEN) {};
+    VolUpSwitch() : InSwitch(VOL_UP_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        pulsePin(m_outPin, PULSE_LEN);
+        pulsePin(VOL_UP_PIN, PULSE_LEN);
     }
 };
 
 /** Pulse VOL_DN_PIN when VOL_DN_SWITCH is activated. */
-class VolDnSwitch : public InputSwitch
+class VolDnSwitch : public InSwitch
 {
 public:
-    VolDnSwitch() : InputSwitch(VOL_DN_SWITCH, VOL_DN_PIN, ACTIVE, DEBOUNCE_LEN) {};
+    VolDnSwitch() : InSwitch(VOL_DN_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        pulsePin(m_outPin, PULSE_LEN);
+        pulsePin(VOL_DN_PIN, PULSE_LEN);
     }
 };
 
 /** Pulse SOURCE_UP_PIN when SOURCE_UP_SWITCH is activated. */
-class SrcUpSwitch : public InputSwitch
+class SrcUpSwitch : public InSwitchNoRepeat
 {
 public:
-    SrcUpSwitch() : InputSwitch(SOURCE_UP_SWITCH, SOURCE_UP_PIN, ACTIVE, DEBOUNCE_LEN) {};
+    SrcUpSwitch() : InSwitchNoRepeat(SOURCE_UP_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        pulsePin(m_outPin, PULSE_LEN);
+        pulsePin(SOURCE_UP_PIN, PULSE_LEN);
     }
 };
 
 
 /** Pulse SOURCE_UP_PIN when SOURCE_UP_SWITCH is activated. */
-class SrcDnSwitch : public InputSwitch
+class SrcDnSwitch : public InSwitchNoRepeat
 {
 public:
-    SrcDnSwitch() : InputSwitch(SOURCE_DN_SWITCH, SOURCE_DN_PIN, ACTIVE, DEBOUNCE_LEN) {};
+    SrcDnSwitch() : InSwitchNoRepeat(SOURCE_DN_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        pulsePin(m_outPin, PULSE_LEN);
+        pulsePin(SOURCE_DN_PIN, PULSE_LEN);
     }
 };
 
 /** Toggle system power state when SOURCE_UP_SWITCH is activated. */
-class PwrSwitch : public InputSwitch
+class PwrSwitch : public InSwitchNoRepeat
 {
 public:
-    PwrSwitch() : InputSwitch(PWR_SWITCH, PWR_PIN, ACTIVE, DEBOUNCE_LEN) {};
+    PwrSwitch() : InSwitchNoRepeat(PWR_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        pulsePin(m_outPin, PULSE_LEN);
+        setPower(!isPower);
     }
 };
 
 /** Toggle system mute state when MUTE_SWITCH is activated. */
-class MuteSwitch : public InputSwitch
+class MuteSwitch : public InSwitchNoRepeat
 {
 public:
-    MuteSwitch() : InputSwitch(MUTE_SWITCH, MUTE_PIN, ACTIVE, DEBOUNCE_LEN) {};
+    MuteSwitch() : InSwitchNoRepeat(MUTE_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        pulsePin(m_outPin, PULSE_LEN);
+        setMute(!isMute);
     }
 };
 

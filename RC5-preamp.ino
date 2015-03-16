@@ -38,8 +38,8 @@ RC5 *rc5;       ///< remote control decoder
 RCParams rc;    ///< remote control decoder params
 
 #define NUM_SWITCHES 5
-InputSwitch* switchArr[NUM_SWITCHES];
-InputSwitch* pwrSwitch;
+InSwitch* switchArr[NUM_SWITCHES];
+InSwitch* pwrSw;
 
 // switch states
 int previousPwr = INACTIVE;
@@ -72,7 +72,7 @@ void setup()
 
     // Instantiate system objects.
     rc5 = new RC5(IR_PIN);
-    pwrSwitch = new PwrSwitch();
+    pwrSw = new PwrSwitch();
     switchArr[0] = new VolUpSwitch();
     switchArr[1] = new VolDnSwitch();
     switchArr[2] = new SrcUpSwitch();
@@ -120,7 +120,7 @@ void loop()
 //    }
 
     // Unconditionally poll power switch.
-    pwrSwitch->poll();
+    pwrSw->poll();
 
     // Poll remaining switches
     if (isPower)

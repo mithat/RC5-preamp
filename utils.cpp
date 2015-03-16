@@ -69,32 +69,40 @@ void setMute(bool mute)
  * @param  pwr  true to turn on, false to turn off.
  * @return void
  */
+// TODO: Get readme up to speed on power LED stuff.
 void setPower(bool pwr)
 {
-    // TODO: Get readme up to speed on power LED stuff.
+
+#if POWERUP_FLASH_PERIOD > 0
+#define NUM_FLASHES POWERUP_MUTE_LEN/POWERUP_FLASH_PERIOD
+#else
+#define NUM_FLASHES 0
+#endif // POWERUP_FLASH_PERIOD
     if (pwr && !isPower)        // if powering up
     {
         setMute(true);
         isPower = pwr;
-        digitalWrite(PWR_PIN, pwr);
+        digitalWrite(PWR_PIN, HIGH);
 
-        for (int i = 0; i < POWERUP_MUTE_LEN/POWERUP_FLASH_PERIOD; i++)
+        // TODO: Poll rc5 and power switch to override powerup?
+        for (int i = 0; i < NUM_FLASHES; i++)
         {
             digitalWrite(PWR_LED, HIGH);
             delay(POWERUP_FLASH_PERIOD/2);
             digitalWrite(PWR_LED, LOW);
             delay(POWERUP_FLASH_PERIOD/2);
         }
+
         digitalWrite(PWR_LED, HIGH);
         setMute(false);
     }
     else if (!pwr && isPower)   // if powering up or down
     {
-        digitalWrite(PWR_LED, pwr);
+        digitalWrite(PWR_LED, LOW);
         setMute(true);
         delay(POWERDOWN_DELAY);
         isPower = pwr;
-        digitalWrite(PWR_PIN, pwr);
+        digitalWrite(PWR_PIN, LOW);
     }
 }
 

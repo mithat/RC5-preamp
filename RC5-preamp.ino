@@ -58,6 +58,7 @@ void setup()
     pinMode(SOURCE_DN_PIN, OUTPUT);
     pinMode(MUTE_PIN, OUTPUT);
     pinMode(PWR_PIN, OUTPUT);
+    pinMode(PWR_LED, OUTPUT);
     pinMode(RC_CMD_PIN, OUTPUT);
 
     pinMode(VOL_UP_SWITCH, INPUT_SWITCH);
@@ -80,6 +81,7 @@ void setup()
     digitalWrite(RC_CMD_PIN, HIGH);
     rc.togglePrevious = 99; // state of rc5.toggle on initialization seems to be 0, so...
     rc.consecutivePressed = 0;
+    isPower = true;      // kludge to get setPower to work correctly
     setPower(false);     // makes sure the power is off on reset.
 }
 

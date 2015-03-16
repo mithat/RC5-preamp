@@ -71,10 +71,31 @@ void setMute(bool mute)
  */
 void setPower(bool pwr)
 {
-    // TODO: Add power-on mute delay and delay of power off so mute can fully activate before poweroff.
-    isPower = pwr;
-    setMute(!isPower);
-    digitalWrite(PWR_PIN, isPower);
+    // TODO: Get readme up to speed on power LED stuff.
+    if (pwr && !isPower)        // if powering up
+    {
+        setMute(true);
+        isPower = pwr;
+        digitalWrite(PWR_PIN, pwr);
+
+        for (int i = 0; i < POWERUP_MUTE_LEN/POWERUP_FLASH_PERIOD; i++)
+        {
+            digitalWrite(PWR_LED, HIGH);
+            delay(POWERUP_FLASH_PERIOD/2);
+            digitalWrite(PWR_LED, LOW);
+            delay(POWERUP_FLASH_PERIOD/2);
+        }
+        digitalWrite(PWR_LED, HIGH);
+        setMute(false);
+    }
+    else if (!pwr && isPower)   // if powering up or down
+    {
+        digitalWrite(PWR_LED, pwr);
+        setMute(true);
+        delay(POWERDOWN_DELAY);
+        isPower = pwr;
+        digitalWrite(PWR_PIN, pwr);
+    }
 }
 
 /**

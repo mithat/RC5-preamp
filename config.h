@@ -33,9 +33,13 @@
 // =======
 // Timings
 // =======
-#define PULSE_LEN  150  // Number of milliseconds output pulses should last.
-#define PULSE_SKIP 5    // Number of pulses to skip in "long-gap" repetitions.
-#define DEBOUNCE_LEN 20 // Number of milliseconds to debounce switches.
+#define PULSE_LEN    150            // Number of milliseconds output pulses should last.
+#define PULSE_SKIP   5              // Number of pulses to skip in "long-gap" repetitions.
+#define DEBOUNCE_LEN 20             // Number of milliseconds to debounce switches.
+#define POWERUP_MUTE_LEN     4000   // Number of milliseconds to mute output on powerup.
+                                    // Should be divisible by POWERUP_FLASH_PERIOD
+#define POWERUP_FLASH_PERIOD 500    // The period in milliseconds of the powerup LED flashing.
+#define POWERDOWN_DELAY 200         // Number of milliseconds to delay powering down so mute can engage.
 
 // ====================
 // I/O connections
@@ -47,10 +51,11 @@
 #define SOURCE_DN_SWITCH A3 // Input: input source down switch.
 #define MUTE_SWITCH      A4 // Input: mute switch.
 #define PWR_SWITCH       A5 // Input: power switch.
+#define PWR_LED          6  // Output: power indicator.
 
 // Remote control
-#define IR_PIN 2            // Pin to which the IR decoder module connects.
-#define RC_CMD_PIN       13 // Output: changes state when valid command is received.
+#define IR_PIN        2     // Pin to which the IR decoder module connects.
+#define RC_CMD_PIN    13    // Output: changes state when valid command is received.
 
 // Control outputs
 #define VOL_UP_PIN    12    // Pulses high when volume should increase.
@@ -59,6 +64,7 @@
 #define SOURCE_DN_PIN 9     // Pulses high when input should cycle to previous source.
 #define MUTE_PIN      8     // High when system is in muted state, low otherwise
 #define PWR_PIN       7     // High when system is in powered-up state, low otherwise.
+
 
 // ============
 // RC5 commands

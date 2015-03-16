@@ -32,25 +32,25 @@
 extern bool isPower;
 extern bool isMute;
 
-/** Pulse VOL_UP_PIN when VOL_UP_SWITCH is activated. */
+/** Turn up the volume when the VOL_UP_SWITCH is activated. */
 class VolUpSwitch : public InSwitch
 {
 public:
     VolUpSwitch() : InSwitch(VOL_UP_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        pulsePin(VOL_UP_PIN, PULSE_LEN);
+        volCmd(UP);
     }
 };
 
-/** Pulse VOL_DN_PIN when VOL_DN_SWITCH is activated. */
+/** Turn down the volume when the VOL_DN_SWITCH is activated. */
 class VolDnSwitch : public InSwitch
 {
 public:
     VolDnSwitch() : InSwitch(VOL_DN_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        pulsePin(VOL_DN_PIN, PULSE_LEN);
+        volCmd(DN);
     }
 };
 

@@ -71,12 +71,9 @@ void setMute(bool mute)
  */
 void setPower(bool pwr)
 {
-    // unmute if going from off to on state
-    if (!isPower && pwr)
-    {
-        setMute(false);
-    }
+    // TODO: Add power-on mute delay and delay of power off so mute can fully activate before poweroff.
     isPower = pwr;
+    setMute(!isPower);
     digitalWrite(PWR_PIN, isPower);
 }
 

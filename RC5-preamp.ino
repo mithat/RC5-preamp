@@ -29,20 +29,17 @@
 // ===================================
 // Program state variables and objects
 // ===================================
-// TODO: Refactor state globals and utils into an object(s)(?)
-// TODO: Refactor all RC stuff into an object(?)
+// TODO: Refactor state globals and utils into an object(s)?
+// TODO: Refactor all RC stuff into an object?
 
-bool isMute;    ///< mute state of the system.
-bool isPower;   ///< power state of the system.
+bool isMute;    ///< mute state of the system
+bool isPower;   ///< power state of the system
 RC5 *rc5;       ///< remote control decoder
 RCParams rc;    ///< remote control decoder params
 
 #define NUM_SWITCHES 5
-InSwitch* switchArr[NUM_SWITCHES];
-InSwitch* pwrSw;
-
-// switch states
-int previousPwr = INACTIVE;
+InSwitch* switchArr[NUM_SWITCHES];  ///< array of UI switches
+InSwitch* pwrSw;                    ///< the power switch
 
 // ====================
 // Action!
@@ -103,22 +100,6 @@ void loop()
 #endif // PDEBUG
         rcProcessCommand();
     }
-
-//    // Poll the switches because the remote control library may use timer interrupts.
-//    if (digitalRead(PWR_SWITCH) == ACTIVE)
-//    {
-//        delay(DEBOUNCE_LEN);
-//        if ((digitalRead(PWR_SWITCH) == ACTIVE) && (previousPwr == INACTIVE))
-//        {
-//            setPower(!isPower);
-//            previousPwr = ACTIVE;
-//        }
-//    }
-//    else
-//    {
-//        previousPwr = INACTIVE;
-//    }
-
     // Unconditionally poll power switch.
     pwrSw->poll();
 

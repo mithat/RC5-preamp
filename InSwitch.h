@@ -26,6 +26,8 @@
 #include <limits.h>
 #include <Arduino.h>
 
+// TODO: Merge InSwitch with InSwitchNoRepeat by adding a "repeatOnConsecutive" member.
+
 /**
  * Abstract encapsulation of an input switch.
  * An InSwitch triggers some action when it is active while being polled.
@@ -47,8 +49,8 @@ public:
     /** The action associated with this switch. Pure virtual.
      * @return void
      */
-    // TODO: No, really, this should be a function pointer rather than use derived singletons,
-    // but I don't know if they're supported in Arduino.
+    // TODO: No, really, this should be done with a function pointer rather than derived singletons,
+    // but I don't know if function pointers are supported in Arduino. */
     virtual void action() =0;
 
     /** Poll the switch and take action if needed. Virtual.

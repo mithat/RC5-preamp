@@ -27,18 +27,18 @@
 // ====================
 // Options
 // ====================
-
 #define PDEBUG          // Print DEBUG stuff to Serial. Comment out or #undef for production.
-
 #define ACTIVE_LOW      // Uncomment to make switch inputs active low and enable pullups;
                         // comment out to make switch inputs active high with no pullups.
-
+// =======
+// Timings
+// =======
 #define PULSE_LEN  150  // Number of milliseconds output pulses should last.
 #define PULSE_SKIP 5    // Number of pulses to skip in "long-gap" repetitions.
 #define DEBOUNCE_LEN 20 // Number of milliseconds to debounce switches.
 
 // ====================
-// Constants
+// I/O connections
 // ====================
 // UI
 #define VOL_UP_SWITCH    A0 // Input: volume up switch.
@@ -47,20 +47,22 @@
 #define SOURCE_DN_SWITCH A3 // Input: input source down switch.
 #define MUTE_SWITCH      A4 // Input: mute switch.
 #define PWR_SWITCH       A5 // Input: power switch.
+
+// Remote control
+#define IR_PIN 2            // Pin to which the IR decoder module connects.
 #define RC_CMD_PIN       13 // Output: changes state when valid command is received.
 
-// Inputs
-#define IR_PIN 2            // Pin to which the IR decoder module connects.
-
-// Outputs
+// Control outputs
 #define VOL_UP_PIN    12    // Pulses high when volume should increase.
 #define VOL_DN_PIN    11    // Pulses high when volume should decrease.
 #define SOURCE_UP_PIN 10    // Pulses high when input should cycle to next source.
 #define SOURCE_DN_PIN 9     // Pulses high when input should cycle to previous source.
-#define MUTE_PIN      8     // Goes high when system should mute.
-#define PWR_PIN       7     // Goes high when system is in powered-up state.
+#define MUTE_PIN      8     // High when system is in muted state, low otherwise
+#define PWR_PIN       7     // High when system is in powered-up state, low otherwise.
 
+// ============
 // RC5 commands
+// ============
 // Taken from http://en.wikipedia.org/wiki/RC-5#System_and_Command_Codes
 // and real-world testing with an RCA RCRN0GR universal remote.
 #define DEVICE_PREAMP 16
@@ -71,7 +73,9 @@
 #define CMD_PWR       12
 
 
-/* Maybe you don't play with the rest of these, ok? */
+// ================================================
+// Maybe you don't play with the rest of these, ok?
+// ================================================
 #define DN false    // Indicates downward travel for volume and input select.
 #define UP true     // Indicates upward travel for volume and input select.
 

@@ -150,7 +150,6 @@ void sourceCmd(bool direction)
         if (rc.consecutivePressed % PULSE_SKIP == 0)    // execute only every PULSE_SKIP pulses
         {
             pulsePin(direction == UP ? SOURCE_UP_PIN : SOURCE_DN_PIN, PULSE_LEN);
-            Serial.println(rc.consecutivePressed);
         }
     }
 }

@@ -27,6 +27,11 @@ All inputs and outputs are, in Arduino parlance, 'digital'.
 
 ### User interface connections
 
+The following user interface switches are optional. The out-of-the-box 
+configuration uses internal pullups on the switched inputs and assumes normally 
+open momentary contact switches. There is no need to  debounce the switches if 
+they settle within about 20 ms (defined in `config.h`).
+
 Pin name           | Type         | Function
 ------------------ | ------------ | -------------------------------
 `VOL_UP_SWITCH`    | input switch | When pressed, pulses `VOL_UP_PIN` and sets `MUTE_PIN` `LOW`.
@@ -37,12 +42,7 @@ Pin name           | Type         | Function
 `PWR_SWITCH`       | input switch | Toggles power state of the system. Sets `PWR_PIN` and `MUTE_PIN` `HIGH` or `LOW` as needed.
 `RC_CMD_PIN`       | output       | Toggles state when a valid command is received.
 
-The out-of-the-box configuration uses internal pullups on the switched inputs 
-and assumes normally open momentary contact switches. There is no need to 
-debounce the switches if they settle within about 20 ms (defined in 
-`config.h`).
-
-Note that if you want to use `RC_CMD_PIN` to flash an LED when a remote control 
+If you want to use `RC_CMD_PIN` to flash an LED when a remote control 
 command is received, you'll need to trigger the LED on both rising and falling 
 edges.
 

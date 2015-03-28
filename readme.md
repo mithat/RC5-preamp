@@ -10,9 +10,10 @@ Requirements
 You will need an [Arduino Uno](http://www.arduino.cc/en/Main/arduinoBoardUno), 
 Guy Carpenter's [RC5 library](https://github.com/guyc/RC5), an IR remote 
 control that can send RC5 preamplifier commands, and supporting hardware as 
-documented below. (I used an 
+documented below. I used an 
 [RCA RCRN08GR](http://www.rcaaudiovideo.com/remotes/6-8-devices/?sku=RCRN08GR) 
-universal remote during development.)
+universal remote during development, but in theory any universal remote that
+supports a Philips amp or receiver should work.
 
 RC5-preamp was built using the Arduino 1.6.1 framework. Other versions may work 
 but are not supported.

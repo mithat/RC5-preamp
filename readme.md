@@ -50,13 +50,13 @@ edges.
 
 Pin name           | Type   | Function
 ------------------ | ------ | -------------------------------
-`IR_PIN 2`         | input  | Pin to which an IR decoder module connects.
+`IR_PIN 2`         | input  | Pin to which the IR decoder module connects.
 `VOL_UP_PIN`       | output | Pulses high when volume should increase.
 `VOL_DN_PIN`       | output | Pulses high when volume should decrease.
 `SOURCE_UP_PIN`    | output | Pulses high when input should cycle to the next input source.
 `SOURCE_DN_PIN`    | output | Pulses high when input should cycle to the previous source.
 `MUTE_PIN`         | output | High when system should mute, low otherwise.
-`PWR_PIN`          | output | High when system power is the on state, low otherwise.
+`PWR_PIN`          | output | High when system power is in the on state, low otherwise.
 
 The IR decoder module should use a
 [36 kHz carrier](http://en.wikipedia.org/wiki/RC-5#Protocol_Details). The 
@@ -95,18 +95,16 @@ RC5-preamp was designed to be powered up continuously, even when the preamp is
 off. Doing otherwise would make powering on the system via remote control a 
 mite tricky.
 
-RC5-preamp does not remember the state of the system when the power is cycled 
-or when the Arduino is reset. On power-up/reset, `PWR_PIN` will be `LOW`
-(i.e., power off) and `MUTE_PIN` will be in a `LOW` (i.e., umnuted) state.
-
-A power button press or remote control signal toggles `PWR_PIN` `HIGH` (on) or 
-`LOW` (off).  When in the off state, RC5-preamp is inhibited from processing 
-commands other than power button and remote control signal. `PWR_PIN` can be 
-used to control the main power delivered to the preamp--possibly via relay
-control.
+On power-up or reset, `PWR_PIN` will be `LOW` (i.e., power off) and 
+`MUTE_PIN` will be in a `LOW` (i.e., umnuted) state. A power button press or 
+remote control signal toggles `PWR_PIN` `HIGH` (on) or `LOW` (off).  When in
+the off state, RC5-preamp is inhibited from processing commands other than the
+power button and power remote control signal. `PWR_PIN` can be used to control 
+the main power delivered to the preamp--possibly via relay control.
 
 When in the off state, the system mutes (`MUTE_PIN` is `HIGH`), and it unmutes
-(`MUTE_PIN` is `LOW`) when in the on state.
+(`MUTE_PIN` is `LOW`) when in the on state. A turn-on mute delay and turn-off 
+power delay are included.
 
 Volume up/down button presses or remote control signals will pulse the 
 `VOL_UP_PIN` or `VOL_DN_PIN` outputs (whichever is appropriate) for
@@ -121,25 +119,25 @@ Source up/down button presses or source up remote control signals will pulse
 the `SOURCE_UP_PIN` or `SOURCE_DN_PIN` outputs (whichever is appropriate) for
 about 150 ms on each press. Holding down the remote control source up button
 will cause the pulse to repeat about every 500 ms. Note that there is no 
-remote  control source down signal. I have not found an instance of an RC5 
-remote that  provides  this  functionality, nor does there appear to be a 
+remote control command for source down. I have not found an instance of an RC5 
+remote that  provides  this  functionality nor does there appear to be a 
 standard for it, so it's not implemented.
 
 ### Software 
-Making sure the [RC5 library](https://github.com/guyc/RC5) is in
-`../libraries`, compile and upload this project to your Arduino Uno using 
+With the [RC5 library](https://github.com/guyc/RC5) properly installed in your
+`libraries` directory, compile and upload this project to your Arduino using 
 your favorite method.
 
 For development, I used Sudar's 
 [Arduino-Makefile](https://github.com/sudar/Arduino-Makefile) and a C++ IDE. 
-The project's child makefile is included in this distribution. Using
-Arduino-Makefile and the child makefile is not required; the sketch should 
-build just fine in the vanilla Arduino IDE.
+The project's child makefile is included in this distribution if you'd like to
+do the same. Using Arduino-Makefile and the child makefile is not required; the 
+sketch should  build just fine in the official Arduino IDE.
 
 You can use any subset of the functionality offered by RC5-preamp. However, 
 you'll have to modify the source if you don't plan to use the power on/off
-functionality because all other functions are inhibited when the system is in 
-the off state.
+function because all other functions are inhibited when the system is in the 
+off state.
 
 With appropriate changes to the source code, you should be able adapt this 
 project to other Arduinos.  If you do so, be sure to share the love. (See 

@@ -70,6 +70,7 @@ void setMute(bool mute)
  * @return void
  */
 // TODO: Get readme up to speed on power LED stuff.
+// TODO: More better Doxygen comments for setPower().
 void setPower(bool pwr)
 {
 
@@ -96,13 +97,15 @@ void setPower(bool pwr)
         digitalWrite(PWR_LED, HIGH);
         setMute(false);
     }
-    else if (!pwr && isPower)   // if powering up or down
+    else if (!pwr && isPower)   // if powering down
     {
         digitalWrite(PWR_LED, LOW);
         setMute(true);
         delay(POWERDOWN_DELAY);
         isPower = pwr;
         digitalWrite(PWR_PIN, LOW);
+        delay(POWERUP_MUTE_LEN);
+        setMute(false);
     }
 }
 

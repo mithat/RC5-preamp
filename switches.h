@@ -26,6 +26,7 @@
 
 #include "InSwitch.h"
 #include "InSwitchNoRepeat.h"
+#include "InSwitchLatching.h"
 #include "config.h"
 #include "utils.h"
 

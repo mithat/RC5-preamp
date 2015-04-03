@@ -87,12 +87,12 @@ void loop()
     {
 #ifdef PDEBUG
         Serial.println("");
-        Serial.print("rc.address: ");
-        Serial.print(rc.address);
-        Serial.print(" rc.command: ");
-        Serial.print(rc.command);
+        Serial.print("rc->address: ");
+        Serial.print(rc->getAddress());
+        Serial.print(" rc->command: ");
+        Serial.print(rc->getCommand());
         Serial.print(" [");
-        Serial.print(rc.toggle);
+        Serial.print(rc->getToggle());
         Serial.print("]");
         Serial.println();
 #endif // PDEBUG

@@ -123,7 +123,10 @@ remote control command for source down. I have not found an instance of an RC5
 remote that  provides  this  functionality nor does there appear to be a 
 standard for it, so it's not implemented.
 
-### Software 
+### Software
+Several compile-time configuration options are available in `config.h`. They
+should be self-explanatory.
+
 With the [RC5 library](https://github.com/guyc/RC5) properly installed in your
 `libraries` directory, compile and upload this project to your Arduino using 
 your favorite method.

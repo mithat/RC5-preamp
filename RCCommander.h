@@ -24,6 +24,7 @@
 #define RCCOMMANDER_H
 
 #include <RC5.h>
+#include "config.h"
 
 /**
  * Decoder and processor of remote control communications.
@@ -32,6 +33,8 @@
     {
         rc->processCommand();
     }
+ * and if you have enabled LATCHING_VOLUME, then
+TODO
  */
 class RCCommander
 {
@@ -57,6 +60,14 @@ public:
      * @return void
      */
     void volCmd(bool direction);
+
+#ifdef LATCHING_VOLUME
+    /**
+    * Unlatch the volume if volume is latched and ?? ms have transpired since latching.
+    * @return void
+    */
+    void testVolLatch();
+#endif // LATCHING_VOLUME
 
     /**
      * Handle a mute event.
@@ -103,6 +114,9 @@ private:
     unsigned char m_toggle;             ///< toggle state of current RC command.
     unsigned char m_togglePrevious;     ///< toggle state of previously received RC command.
     unsigned long m_consecutivePressed; ///< counter for consecutive RC commands.
+#ifdef LATCHING_VOLUME
+    unsigned long m_volLatchTime;       ///< time at which volume was latched (0 == unlatched)
+#endif // LATCHING_VOLUME
     RC5 *m_decoder;                     ///< the IR decoder
 };
 

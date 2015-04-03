@@ -27,7 +27,8 @@
 // ====================
 // Options
 // ====================
-//#define PDEBUG        // Print DEBUG stuff to Serial. Comment out or #undef for production.
+//#define PDEBUG          // Print DEBUG stuff to Serial. Comment out or #undef for production.
+#define LATCHING_VOLUME // Comment out for pulsing volume control, uncomment for continuous.
 #define ACTIVE_LOW      // Uncomment to make switch inputs active low and enable pullups;
                         // comment out to make switch inputs active high with no pullups.
 // =======
@@ -76,7 +77,8 @@
 #define CMD_VOLUP     16
 #define CMD_VOLDN     17
 #define CMD_MUTE      13
-#define CMD_INPUT     59    // This might be contentious. TODO: Additional testing of RC CMD_INPUT (59).
+#define CMD_INPUT     59    // This might be contentious.
+                            // TODO: Additional testing of RC CMD_INPUT (59).
 #define CMD_PWR       12
 
 

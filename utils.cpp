@@ -83,8 +83,19 @@ void setPower(bool pwr)
 void changeVolume(bool direction)
 {
     setMute(false);
+#ifdef LATCHING_VOLUME
+    digitalWrite(direction == UP ? VOL_UP_PIN : VOL_DN_PIN, HIGH);
+#else
     pulsePin(direction == UP ? VOL_UP_PIN : VOL_DN_PIN, PULSE_LEN);
+#endif // LATCHING_VOLUME
 }
+
+#ifdef LATCHING_VOLUME
+void unlatchVolume(bool direction)
+{
+    digitalWrite(direction == UP ? VOL_UP_PIN : VOL_DN_PIN, LOW);
+}
+#endif // LATCHING_VOLUME
 
 void changeSource(bool direction)
 {

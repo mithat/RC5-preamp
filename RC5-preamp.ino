@@ -87,23 +87,23 @@ void loop()
     {
 #ifdef PDEBUG
         Serial.println("");
-        Serial.print("rc->address: ");
-        Serial.print(rc->getAddress());
-        Serial.print(" rc->command: ");
-        Serial.print(rc->getCommand());
-        Serial.print(" [");
-        Serial.print(rc->getToggle());
-        Serial.print("]");
+        Serial.print("rc->address: "); Serial.print(rc->getAddress());
+        Serial.print(" rc->command: "); Serial.print(rc->getCommand());
+        Serial.print(" ["); Serial.print(rc->getToggle()); Serial.print("]");
         Serial.println();
 #endif // PDEBUG
         rc->processCommand();
     }
     else
     {
+#ifdef LATCHING_VOLUME
+        rc->testVolLatch();
+#endif // LATCHING_VOLUME
+
         // Unconditionally poll power switch.
         pwrSw->poll();
 
-        // Poll remaining switches
+        // Poll remaining switches only if power is on.
         if (isPower)
         {
             for (int i = 0; i < NUM_SWITCHES; i++)

@@ -61,6 +61,15 @@ void setPower(bool pwr);
  */
 void changeVolume(bool direction);
 
+#ifdef LATCHING_VOLUME
+/**
+ * Unlatch a volume control signal.
+ * @param  direction  UP or DN.
+ * @return void
+ */
+void unlatchVolume(bool direction);
+#endif // LATCHING_VOLUME
+
 /**
  * Select the next or previous source input.
  * @param  direction  UP or DN.

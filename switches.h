@@ -34,6 +34,21 @@ extern bool isPower;
 extern bool isMute;
 
 /** Turn up the volume when the VOL_UP_SWITCH is activated. */
+#ifdef LATCHING_VOLUME
+class VolUpSwitch : public InSwitchLatching
+{
+public:
+    VolUpSwitch() : InSwitchLatching(VOL_UP_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
+    virtual void action()
+    {
+        changeVolume(UP);
+    }
+    virtual void unlatchAction()
+    {
+        unlatchVolume(UP);
+    }
+};
+#else  // #ndef LATCHING_VOLUME
 class VolUpSwitch : public InSwitch
 {
 public:
@@ -41,10 +56,27 @@ public:
     virtual void action()
     {
         changeVolume(UP);
+        delay(100); // extra delay to make consistent with RC repeat speed.
     }
 };
+#endif // LATCHING_VOLUME
 
+#ifdef LATCHING_VOLUME
 /** Turn down the volume when the VOL_DN_SWITCH is activated. */
+class VolDnSwitch : public InSwitchLatching
+{
+public:
+    VolDnSwitch() : InSwitchLatching(VOL_DN_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
+    virtual void action()
+    {
+        changeVolume(DN);
+    }
+    virtual void unlatchAction()
+    {
+        unlatchVolume(DN);
+    }
+};
+#else  // #ndef LATCHING_VOLUME
 class VolDnSwitch : public InSwitch
 {
 public:
@@ -52,8 +84,10 @@ public:
     virtual void action()
     {
         changeVolume(DN);
+        delay(100); // extra delay to make consistent with RC repeat speed.
     }
 };
+#endif // LATCHING_VOLUME
 
 /** Pulse SOURCE_UP_PIN when SOURCE_UP_SWITCH is activated. */
 class SrcUpSwitch : public InSwitchNoRepeat

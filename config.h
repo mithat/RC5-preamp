@@ -28,20 +28,22 @@
 // Options
 // ====================
 //#define PDEBUG          // Print DEBUG stuff to Serial. Comment out or #undef for production.
-#define LATCHING_VOLUME // Comment out for pulsing volume control, uncomment for continuous.
+//#define LATCHING_VOLUME // Comment out for pulsing volume control, uncomment for continuous on-until-off.
 #define ACTIVE_LOW      // Uncomment to make switch inputs active low and enable pullups;
                         // comment out to make switch inputs active high with no pullups.
 // =======
 // Timings
 // =======
-#define PULSE_LEN    150            // Number of milliseconds output pulses should last.
-#define PULSE_SKIP   5              // Number of pulses to skip in "long-gap" repetitions.
-#define DEBOUNCE_LEN 20             // Number of milliseconds to debounce switches.
+#define PULSE_LEN       150         // Number of milliseconds output pulses should last.
+#define PULSE_SKIP      5           // Number of pulses to skip in "long-gap" repetitions.
+#define DEBOUNCE_LEN    20          // Number of milliseconds to debounce switches.
 #define POWERUP_MUTE_LEN     4000   // Number of milliseconds to mute output on powerup.
-#define POWERUP_FLASH_PERIOD 500    // The period in milliseconds of the powerup LED flashing.
+#define POWERUP_FLASH_PERIOD 500    // Length of powerup LED flashing period (ms).
                                     // POWERUP_MUTE_LEN should be divisible by POWERUP_FLASH_PERIOD.
                                     // Set to 0 (zero) to disable.
 #define POWERDOWN_DELAY 200         // Number of milliseconds to delay powering down so mute can engage.
+#define LATCH_LEN       115         // Milliseconds between remote control "are we still latched?" detections.
+                                    // (Only makes sense if LATCHING_VOLUME is defined)
 
 // ====================
 // I/O connections

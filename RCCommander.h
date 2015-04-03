@@ -63,7 +63,7 @@ public:
 
 #ifdef LATCHING_VOLUME
     /**
-    * Unlatch the volume if volume is latched and ?? ms have transpired since latching.
+    * Unlatch the volume if LATCH_LEN ms have transpired since latching.
     * @return void
     */
     void testVolLatch();

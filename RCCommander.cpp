@@ -52,15 +52,18 @@ void RCCommander::volCmd(bool direction)
 #ifdef LATCHING_VOLUME
 void RCCommander::testVolLatch()
 {
-    // need extra test for cases where millis overflows
-    if (m_volLatchTime > 0 && (millis() > (m_volLatchTime + PULSE_LEN)))
+    if (m_volLatchTime > 0)
     {
-        // reset volumes
-        unlatchVolume(UP);
-        unlatchVolume(DN);
+        // if we're past the due date or millis() has overflown ...
+        if (millis() > (m_volLatchTime + LATCH_LEN) || millis() < m_volLatchTime)
+        {
+            // reset volumes
+            unlatchVolume(UP);
+            unlatchVolume(DN);
 
-        // reset latch state
-        m_volLatchTime = 0;
+            // reset latch state
+            m_volLatchTime = 0;
+        }
     }
 }
 #endif // LATCHING_VOLUME

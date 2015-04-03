@@ -26,28 +26,46 @@
 
 #include <Arduino.h>
 
-/** Parameters from decoded RC command. */
-struct RCParams
-{
-    unsigned char address;            ///< code for the current RC address.
-    unsigned char command;            ///< code for the current RC command.
-    unsigned char toggle;             ///< toggle state of current RC command.
-    unsigned char togglePrevious;     ///< toggle state of previously received RC command.
-    unsigned long consecutivePressed; ///< counter for consecutive RC commands.
-};
-
 // ====================
 // Utility functions
 // ====================
 
+/**
+ * Pulse the specified output pin for the given number of msec.
+ * @param  pin  The pin to pulse.
+ * @param  len  Milliseconds to pulse.
+ * @return void
+ */
 void pulsePin(uint8_t pin, unsigned long len);
-void rcCommandAck();//
+
+/**
+ * Set the mute state of the system.
+ * Set MUTE_PIN HIGH or LOW.
+ * @param  mute true for muted, false for unmuted.
+ * @return void
+ */
 void setMute(bool mute);
+
+/**
+ * Set the power state of the system.
+ * Set PWR_PIN HIGH or LOW. Unmute the system if going from off to on.
+ * @param  pwr  true to turn on, false to turn off.
+ * @return void
+ */
 void setPower(bool pwr);
-void volCmd(bool direction);//
-void muteCmd();//
-void sourceCmd(bool direction);//
-void pwrCmd();//
-void rcProcessCommand();//
+
+/**
+ * Increase or decrease the volume level.
+ * @param  direction  UP or DN.
+ * @return void
+ */
+void changeVolume(bool direction);
+
+/**
+ * Select the next or previous source input.
+ * @param  direction  UP or DN.
+ * @return void
+ */
+void changeSource(bool direction);
 
 #endif // UTILS_H

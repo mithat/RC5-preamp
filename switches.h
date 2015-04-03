@@ -40,7 +40,7 @@ public:
     VolUpSwitch() : InSwitch(VOL_UP_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        volCmd(UP);
+        changeVolume(UP);
     }
 };
 
@@ -51,7 +51,7 @@ public:
     VolDnSwitch() : InSwitch(VOL_DN_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        volCmd(DN);
+        changeVolume(DN);
     }
 };
 
@@ -62,7 +62,7 @@ public:
     SrcUpSwitch() : InSwitchNoRepeat(SOURCE_UP_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        pulsePin(SOURCE_UP_PIN, PULSE_LEN);
+        changeSource(UP);
     }
 };
 
@@ -74,7 +74,7 @@ public:
     SrcDnSwitch() : InSwitchNoRepeat(SOURCE_DN_SWITCH, ACTIVE, DEBOUNCE_LEN) {};
     virtual void action()
     {
-        pulsePin(SOURCE_DN_PIN, PULSE_LEN);
+        changeSource(DN);
     }
 };
 

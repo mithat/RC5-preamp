@@ -19,8 +19,7 @@ void RCCommander::commandAck()
 
 void RCCommander::volCmd(bool direction)
 {
-    setMute(false);
-    pulsePin(direction == UP ? VOL_UP_PIN : VOL_DN_PIN, PULSE_LEN);
+    changeVolume(direction);
 }
 
 void RCCommander::muteCmd()
@@ -65,7 +64,7 @@ void RCCommander::processCommand()
 {
     if (isPower)
     {
-        rcCommandAck();
+        commandAck();
         switch (m_command)
         {
         case CMD_VOLUP:
@@ -89,7 +88,7 @@ void RCCommander::processCommand()
     }
     else if (m_command == CMD_PWR)
     {
-        rcCommandAck();
+        commandAck();
         pwrCmd();
     }
     m_togglePrevious = m_toggle;

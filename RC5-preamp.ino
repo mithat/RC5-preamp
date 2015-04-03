@@ -21,7 +21,7 @@
  * along with RC-preamp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <RC5.h>
+#include "RCCommander.h"
 #include "config.h"
 #include "utils.h"
 #include "switches.h"
@@ -29,13 +29,10 @@
 // ===================================
 // Program state variables and objects
 // ===================================
-// TODO: Refactor state globals and utils into an object(s)?
-// TODO: Refactor all RC stuff into an object?
 
-bool isMute;    ///< mute state of the system
-bool isPower;   ///< power state of the system
-RC5 *rc5;       ///< remote control decoder
-RCParams rc;    ///< remote control decoder params
+bool isMute;        ///< mute state of the system
+bool isPower;       ///< power state of the system
+RCCommander *rc;    ///< remote control processor
 
 #define NUM_SWITCHES 5
 InSwitch* switchArr[NUM_SWITCHES];  ///< array of UI switches
@@ -69,7 +66,7 @@ void setup()
     pinMode(PWR_SWITCH, INPUT_SWITCH);
 
     // Instantiate system objects.
-    rc5 = new RC5(IR_PIN);
+    rc = new RCCommander(new RC5(IR_PIN));
     pwrSw = new PwrSwitch();
     switchArr[0] = new VolUpSwitch();
     switchArr[1] = new VolDnSwitch();
@@ -77,10 +74,8 @@ void setup()
     switchArr[3] = new SrcDnSwitch();
     switchArr[4] = new MuteSwitch();
 
-    // Set intial state
+    // Set initial state
     digitalWrite(RC_CMD_PIN, HIGH);
-    rc.togglePrevious = 99; // state of rc5.toggle on initialization seems to be 0, so...
-    rc.consecutivePressed = 0;
     isPower = true;      // kludge to get setPower to work correctly
     setPower(false);     // makes sure the power is off on reset.
 }
@@ -88,7 +83,7 @@ void setup()
 void loop()
 {
     // Process an RC command or a button push, not both.
-    if (rc5->read(&rc.toggle, &rc.address, &rc.command) && (rc.address == DEVICE_PREAMP))
+    if (rc->readCommand() && (rc->getAddress() == DEVICE_PREAMP))
     {
 #ifdef PDEBUG
         Serial.println("");
@@ -101,7 +96,7 @@ void loop()
         Serial.print("]");
         Serial.println();
 #endif // PDEBUG
-        rcProcessCommand();
+        rc->processCommand();
     }
     else
     {

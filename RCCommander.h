@@ -1,12 +1,44 @@
+/**
+ * @file
+ * @author    Mithat Konar (mithat ~at~ mithatkonar.com)
+ * @copyright Copyright (C) 2015 Mithat Konar
+ * @section   LICENSE
+ *
+ * This file is part of RC-preamp.
+ *
+ * RC-preamp is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * RC-preamp is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with RC-preamp.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef RCCOMMANDER_H
 #define RCCOMMANDER_H
 
 #include <RC5.h>
 
+/**
+ * Decoder and processor of remote control communications.
+ * The typical loop will be:
+    if (rc->readCommand() && (rc->getAddress() == <desired-device>))
+    {
+        rc->processCommand();
+    }
+ */
 class RCCommander
 {
 public:
     RCCommander(RC5 *rc5);
+
+    unsigned char getAddress () {return m_address;}
 
     /**
     * Acknowledge receipt of a valid RC command.
@@ -17,7 +49,8 @@ public:
 
     /**
      * Handle a volume event.
-     * Pulse VOL_UP_PIN or VOL_DN_PIN. Repeat on consecutive events.
+     * Increase or decrease the volume.
+     * Repeat on consecutive events.
      * @param  direction    UP or DOWN
      * @return void
      */
@@ -32,7 +65,8 @@ public:
 
     /**
      * Handle a source select event.
-     * Pulse SOURCE_UP_PIN or SOURCE_DN_PIN. Repeat at a low rate on consecutive events.
+     * Select the next input source.
+     * Repeat at a low rate on consecutive events.
      * @param  direction    UP or DOWN
      * @return void
      */
@@ -50,7 +84,6 @@ public:
      * @return bool true iff a command was decoded.
      */
     bool readCommand();
-
 
     /**
      * Handle remote control commands.

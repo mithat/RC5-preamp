@@ -38,7 +38,9 @@ class RCCommander
 public:
     RCCommander(RC5 *rc5);
 
-    unsigned char getAddress () {return m_address;}
+    unsigned char getAddress() {return m_address;}
+    unsigned char getCommand() {return m_command;}
+    unsigned char getToggle() {return m_toggle;}
 
     /**
     * Acknowledge receipt of a valid RC command.

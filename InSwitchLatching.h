@@ -35,8 +35,7 @@
 class InSwitchLatching : public InSwitch
 {
 public:
-    /** Default constructor */
-    //InSwitchLatching(uint8_t inPin, uint8_t activeState, unsigned long debounceLen);
+    InSwitchLatching(uint8_t inPin, uint8_t activeState, unsigned long debounceLen);
 
     /** Poll the switch and take action if needed. Virtual.
      * @return true iff action was taken.

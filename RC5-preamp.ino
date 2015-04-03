@@ -87,6 +87,7 @@ void setup()
 
 void loop()
 {
+    // Process an RC command or a button push, not both.
     if (rc5->read(&rc.toggle, &rc.address, &rc.command) && (rc.address == DEVICE_PREAMP))
     {
 #ifdef PDEBUG
@@ -102,16 +103,19 @@ void loop()
 #endif // PDEBUG
         rcProcessCommand();
     }
-    // Unconditionally poll power switch.
-    pwrSw->poll();
-
-    // Poll remaining switches
-    if (isPower)
+    else
     {
-        for (int i = 0; i < NUM_SWITCHES; i++)
+        // Unconditionally poll power switch.
+        pwrSw->poll();
+
+        // Poll remaining switches
+        if (isPower)
         {
-            if (switchArr[i]->poll())
-                break;
+            for (int i = 0; i < NUM_SWITCHES; i++)
+            {
+                if (switchArr[i]->poll())
+                    break;
+            }
         }
     }
 }

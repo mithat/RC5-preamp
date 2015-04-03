@@ -41,13 +41,13 @@ struct RCParams
 // ====================
 
 void pulsePin(uint8_t pin, unsigned long len);
-void rcCommandAck();
+void rcCommandAck();//
 void setMute(bool mute);
 void setPower(bool pwr);
-void volCmd(bool direction);
-void muteCmd();
-void sourceCmd(bool direction);
-void pwrCmd();
-void rcProcessCommand();
+void volCmd(bool direction);//
+void muteCmd();//
+void sourceCmd(bool direction);//
+void pwrCmd();//
+void rcProcessCommand();//
 
 #endif // UTILS_H

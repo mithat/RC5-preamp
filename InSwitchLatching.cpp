@@ -22,6 +22,9 @@
 
 #include "InSwitchLatching.h"
 
+InSwitchLatching::InSwitchLatching(uint8_t inPin, uint8_t activeState, unsigned long debounceLen)
+    : InSwitch(inPin, activeState, debounceLen) {};
+
 bool InSwitchLatching::poll()
 {
     if (digitalRead(m_inPin) == m_activeState)
@@ -33,7 +36,8 @@ bool InSwitchLatching::poll()
             return true;
         }
     }
-    else {
+    else
+    {
         unlatch();
         return false;
     }

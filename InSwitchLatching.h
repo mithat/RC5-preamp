@@ -27,11 +27,17 @@
 
 /**
  * Abstract class for a latching input switch.
- * An InSwitchLatching triggers some action when it is active while being polled
- * and an unlatch action when it not active while being polled.
+ * An InSwitchLatching triggers an action once when it is active
+ * while being polled and an unlatch action once when it not active
+ * while being polled.
+ * Member functions action and unlatchAction do not need to manage
+ * the latch state; they need only specify what happens when the
+ * switch is first pressed and then what happens when it is
+ * released.
  * Non-abstract instances will typically be singletons.
  */
-// TODO: merge with base class
+// TODO: merge InSwitchLatching with base InSwitchclass?
+// This will require rethinking the "latch once" behavior.
 class InSwitchLatching : public InSwitch
 {
 public:
@@ -42,11 +48,14 @@ public:
      */
     virtual bool poll();
 
-    /** The unlatching action associated with this switch. Pure virtual.
+    /** The action that should take place when the switch is unlatched. Pure virtual.
      * @return void
      */
-    virtual void unlatch() =0;;
+    virtual void unlatchAction() =0;
+
 protected:
+    bool isLatched;
+
 private:
 };
 

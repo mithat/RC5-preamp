@@ -23,7 +23,10 @@
 #include "InSwitchLatching.h"
 
 InSwitchLatching::InSwitchLatching(uint8_t inPin, uint8_t activeState, unsigned long debounceLen)
-    : InSwitch(inPin, activeState, debounceLen) {};
+    : InSwitch(inPin, activeState, debounceLen)
+{
+    isLatched = false;
+};
 
 bool InSwitchLatching::poll()
 {
@@ -32,13 +35,18 @@ bool InSwitchLatching::poll()
         delay(m_debounceLen);
         if (digitalRead(m_inPin) == m_activeState)
         {
-            action();
-            return true;
+            if (!isLatched)
+            {
+                isLatched = true;
+                action();
+                return true;
+            }
         }
     }
-    else
+    else if (isLatched)
     {
-        unlatch();
-        return false;
+        unlatchAction();
+        isLatched = false;
     }
+    return false;
 }

@@ -75,7 +75,7 @@ void setup()
     switchArr[4] = new MuteSwitch();
 
     // Set initial state
-    digitalWrite(RC_CMD_PIN, HIGH);
+    digitalWrite(RC_CMD_PIN, LOW);
     isPower = true;      // kludge to get setPower to work correctly
     setPower(false);     // makes sure the power is off on reset.
 }

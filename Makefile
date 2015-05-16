@@ -2,6 +2,7 @@
 ARDUINO_LIBS = RC5
 BOARD_TAG = uno
 MONITOR_PORT = /dev/ttyACM0
+#MONITOR_PORT = /dev/ttyUSB0
 MONITOR_CMD = screen-wrap
 
 # "Platform" config

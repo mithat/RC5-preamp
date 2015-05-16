@@ -4,3 +4,4 @@ build-uno/*
 doxygen/html/*
 doxygen/doxygen.log
 doxygen/doxygen_sqlite3.db
+*.h.txt
